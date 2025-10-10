@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKERHUB_USER = 'aadityag'
-        IMAGE_NAME = 'scientific-calculator'
     }
 
     stages {
@@ -21,15 +20,17 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t %DOCKERHUB_USER%/%IMAGE_NAME%:dev .'
+                bat 'docker build -t %DOCKERHUB_USER%/scientific-calculator:dev .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                bat 'docker login -u %DOCKERHUB_USER% -p <DOCKER_PASSWORD>'
-                bat 'docker tag %DOCKERHUB_USER%/%IMAGE_NAME%:dev %DOCKERHUB_USER%/%IMAGE_NAME%:latest'
-                bat 'docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest'
+                withCredentials([string(credentialsId: 'docker-hub-token', variable: 'DOCKER_PASSWORD')]) {
+                    bat 'docker login -u %DOCKERHUB_USER% -p %DOCKER_PASSWORD%'
+                    bat 'docker tag %DOCKERHUB_USER%/scientific-calculator:dev %DOCKERHUB_USER%/scientific-calculator:latest'
+                    bat 'docker push %DOCKERHUB_USER%/scientific-calculator:latest'
+                }
             }
         }
 
