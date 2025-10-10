@@ -1,0 +1,17 @@
+remove old:
+docker rm -f scientific_calculator 2>/dev/null || true
+
+run:
+docker run --rm -it --name scientific_calculator aadityag/scientific-calculator:latest
+
+
+optional:
+
+docker rm -f scientific_calculator 2>/dev/null || true
+docker run -d --name scientific_calculator aadityag/scientific-calculator:latest python /app/calculator_cli.py
+docker exec -it scientific_calculator python /app/calculator_cli.py
+
+
+stop:
+docker stop scientific_calculator  # stop detached container
+docker rm scientific_calculator    # remove if not using --rm
