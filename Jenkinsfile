@@ -36,17 +36,17 @@ pipeline {
 
         stage('Deploy via Ansible') {
             steps {
-                // Run Ansible inside a Docker container
                 bat '''
                     docker run --rm ^
+                        -v //var/run/docker.sock:/var/run/docker.sock ^
                         -v C:/Users/aadit/work/clg/spe/scientific_calculator:/ansible/playbook ^
                         -v C:/Users/aadit/work/clg/spe/scientific_calculator/hosts.ini:/ansible/hosts.ini ^
                         -w /ansible/playbook alpine/ansible ^
                         ansible-playbook -i hosts.ini deploy_calculator.yml
                     '''
-
             }
         }
+
 
     }
 }
