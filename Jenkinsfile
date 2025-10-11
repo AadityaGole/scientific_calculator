@@ -36,17 +36,18 @@ pipeline {
 
         stage('Deploy via Ansible') {
             steps {
-                    bat '''
-                    docker run --rm ^
-                        -v //var/run/docker.sock:/var/run/docker.sock ^
-                        -v C:/Users/aadit/work/clg/spe/scientific_calculator:/ansible/playbook ^
-                        -v C:/Users/aadit/work/clg/spe/scientific_calculator/hosts.ini:/ansible/hosts.ini ^
-                        -w /ansible/playbook ^
-                        cytopia/ansible:latest ^
-                        ansible-playbook -i hosts.ini deploy_calculator.yml
-                    '''
+                bat '''
+                docker run --rm ^
+                    -v //var/run/docker.sock:/var/run/docker.sock ^
+                    -v C:/Users/aadit/work/clg/spe/scientific_calculator:/ansible/playbook ^
+                    -v C:/Users/aadit/work/clg/spe/scientific_calculator/hosts.ini:/ansible/hosts.ini ^
+                    -w /ansible/playbook ^
+                    cytopia/ansible:latest ^
+                    sh -c "pip install requests docker && ansible-playbook -i hosts.ini deploy_calculator.yml"
+                '''
             }
         }
+
 
 
 
