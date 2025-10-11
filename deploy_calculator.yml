@@ -1,32 +1,26 @@
 ---
 - name: Deploy Scientific Calculator Docker container
-  hosts: all
-  become: yes
+  hosts: localhost
+  connection: local
+  become: false
+
   tasks:
-
-    - name: Ensure Docker is installed
-      apt:
-        name: docker.io
-        state: present
-      when: ansible_os_family == "Debian"
-
-    - name: Ensure Docker service is running
-      service:
-        name: docker
-        state: started
-        enabled: yes
-
-    - name: Pull latest calculator image from Docker Hub
-      docker_image:
+    - name: Pull the latest Scientific Calculator image
+      community.docker.docker_image:
         name: aadityag/scientific-calculator
         tag: latest
         source: pull
 
-    - name: Run the calculator container
-      docker_container:
+    - name: Stop and remove existing container (if any)
+      community.docker.docker_container:
+        name: scientific_calculator
+        state: absent
+
+    - name: Start new Scientific Calculator container
+      community.docker.docker_container:
         name: scientific_calculator
         image: aadityag/scientific-calculator:latest
         state: started
-        restart_policy: unless-stopped
-        tty: yes
-        interactive: yes
+        restart_policy: always
+        published_ports:
+          - "8000:8000"
