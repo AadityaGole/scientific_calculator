@@ -1,7 +1,7 @@
 # calculator/calc.py
 """Core scientific functions."""
 import math
-
+#comment
 
 def sqrt(x: float) -> float:
     if x < 0:
